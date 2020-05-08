@@ -1,5 +1,6 @@
 #include "cmd.h"
 #include "convert.h"
+#include "gate.h"
 
 // There is no stack here we use the latest command
 volatile char buf[JSON_BUF_NUM][JSON_BUFF_SIZE] = {0};
@@ -107,6 +108,9 @@ void send_cmds(module_t *module)
                     }
                     if (index < JSON_BUFF_SIZE - 1)
                     {
+                        // stop sensor polling
+                        set_update_time(0.0);
+                        collect_data(module);
                         // create a message from parameters
                         msg.header.cmd = REVISION;
                         msg.header.target_mode = IDACK;
@@ -130,6 +134,9 @@ void send_cmds(module_t *module)
 #else
                         printf("{\"benchmark\":{\"data_rate\":%.2f,\"fail_rate\":%.2f}}\n", data_rate, fail_rate);
 #endif
+                        // restart sensor polling
+                        set_update_time(DEFAULT_REFRESH_MS);
+                        collect_data(module);
                     }
                 }
             }

@@ -2,8 +2,10 @@
 #include <string.h>
 #include "cmd.h"
 #include "convert.h"
+#include "gate.h"
+#include "luos.h"
 
-static unsigned int delayms = 0;
+static time_luos_t update_time = DEFAULT_REFRESH_MS;
 
 //******************* sensor update ****************************
 // This function will gather data from sensors and create a json string for you
@@ -14,17 +16,15 @@ void collect_data(module_t *module)
     for (uint8_t i = 1; i <= get_last_module(); i++)
     {
         // Check if this module is a sensor
-        if (is_sensor( type_from_id(i))) {
-            // This module is a sensor so create a msg
-            json_msg.header.target_mode = ID;
-            json_msg.header.target = i;
-            json_msg.header.cmd = ASK_PUB_CMD;
-            json_msg.header.size = 0;
-            luos_send(module, &json_msg);
+        if (is_sensor(type_from_id(i)))
+        {
+            // This module is a sensor so create a msg to enable auto update
+            update_msg.header.target_mode = IDACK;
+            update_msg.header.target = i;
+            time_to_msg(&update_time, &update_msg);
+            update_msg.header.cmd = UPDATE_PUB;
+            luos_send(module, &update_msg);
         }
-        // Wait to allow each module to manage previous request.
-        volatile uint8_t tempo = 0;
-        for (tempo = 0; tempo<100; tempo++);
     }
 }
 // This function will create a json string for modules datas
@@ -80,11 +80,7 @@ void format_data(module_t *module, char *json)
     }
 }
 
-unsigned int get_delay(void) {
-    return delayms;
+void set_update_time(time_luos_t new_time)
+{
+    update_time = new_time;
 }
-
-void set_delay(unsigned int new_delayms){
-    delayms = new_delayms;
-}
-
