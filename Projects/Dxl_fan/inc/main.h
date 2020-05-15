@@ -69,12 +69,12 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define FAN1_Pin GPIO_PIN_5
-#define FAN1_GPIO_Port GPIOB
-#define FAN2_Pin GPIO_PIN_3
-#define FAN2_GPIO_Port GPIOB
-#define FAN3_Pin GPIO_PIN_0
-#define FAN3_GPIO_Port GPIOB
+#define SHOULDER_FAN_Pin GPIO_PIN_5
+#define SHOULDER_FAN_GPIO_Port GPIOB
+#define ELBOW_FAN_Pin GPIO_PIN_3
+#define ELBOW_FAN_GPIO_Port GPIOB
+#define WRIST_FAN_Pin GPIO_PIN_0
+#define WRIST_FAN_GPIO_Port GPIOB
 #define DEBUG2_Pin GPIO_PIN_1
 #define DEBUG2_GPIO_Port GPIOA
 #define ROBUS_POWER_SENSOR_Pin GPIO_PIN_2

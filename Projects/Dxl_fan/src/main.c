@@ -102,7 +102,7 @@ int main(void)
   MX_CRC_Init();
   /* USER CODE BEGIN 2 */
   luos_init();
-  dxl_init();
+  // dxl_init();
   fan_init();
   /* USER CODE END 2 */
 
@@ -111,7 +111,7 @@ int main(void)
   while (1)
   {
     luos_loop();
-    dxl_loop();
+    // dxl_loop();
     fan_loop();
     /* USER CODE END WHILE */
 
